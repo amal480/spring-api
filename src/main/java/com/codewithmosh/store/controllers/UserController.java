@@ -19,10 +19,8 @@ public class UserController {
 
     @RequestMapping()
     public Iterable<UserDto> getAllUsers(
-            @RequestHeader(name="x-auth-token",required = false) String authToken,
             @RequestParam(required = false,defaultValue = "",name = "sort") String sortBy) {
 
-        System.out.println(authToken);
         if(!Set.of("name","email").contains(sortBy)) {
             sortBy ="name";
         }
@@ -40,5 +38,10 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public UserDto createUser(@RequestBody UserDto data) {
+        return data;
     }
 }
