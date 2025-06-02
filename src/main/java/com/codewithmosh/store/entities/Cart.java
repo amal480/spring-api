@@ -40,4 +40,30 @@ public class Cart {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public CartItem getItem(Long productId){
+        return items.stream()
+                .filter(item->item.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public CartItem addItem(Product product){
+        //Can use getItem() defined above
+        var cartItem =getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(product.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+        } else {
+            cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(1);
+            cartItem.setCart(this);
+            items.add(cartItem);
+        }
+        return cartItem;
+    }
+
 }
