@@ -1,5 +1,6 @@
 package com.codewithmosh.store.entities;
 
+import com.codewithmosh.store.services.AuthService;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "orders")
 public class Order {
+    private static AuthService authService;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,4 +37,26 @@ public class Order {
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.PERSIST)
     private Set<OrderItem> items = new LinkedHashSet<>();
+
+public static Order fromCart(Cart cart,User customer) {
+    var order=new Order();
+    order.setCustomer(customer);
+    order.setStatus(OrderStatus.PENDING);
+    order.setTotalPrice(cart.getTotalPrice());
+
+    cart.getItems().forEach(item->{
+//        var orderItem=new OrderItem();
+//        orderItem.setOrder(order);
+//        orderItem.setProduct(item.getProduct());
+//        orderItem.setQuantity(item.getQuantity());
+//        orderItem.setTotalPrice(item.getTotalPrice());
+//        orderItem.setUnitPrice(item.getProduct().getPrice());
+//        order.getItems().add(orderItem);
+        //or pass as constructor arguments
+        var orderItem=new OrderItem(order,item.getProduct(),item.getQuantity());
+        order.items.add(orderItem);
+    });
+    return order;
+}
+
 }
