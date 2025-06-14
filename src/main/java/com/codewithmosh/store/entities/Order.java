@@ -59,4 +59,8 @@ public static Order fromCart(Cart cart,User customer) {
     return order;
 }
 
+public boolean isPlacedBy(User customer) {
+    return this.customer.equals(customer);
+}
+
 }
