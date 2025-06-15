@@ -14,4 +14,4 @@ spring:
 stripe:
   secretKey: ${STRIPE_SECRET_KEY}
 
-websiteUrl: http:/localhost:4242
+websiteUrl: http://localhost:4242
